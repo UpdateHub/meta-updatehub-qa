@@ -1,0 +1,56 @@
+From 5b1f0fa2048c657f1370d0771eecaf9e76235ae0 Mon Sep 17 00:00:00 2001
+From: Otavio Salvador <otavio@ossystems.com.br>
+Date: Wed, 14 Jun 2017 12:22:12 -0300
+Subject: [PATCH 4/4] qemu-x86: Enable use of UpdateHub
+Organization: O.S. Systems Software LTDA.
+
+Signed-off-by: Otavio Salvador <otavio@ossystems.com.br>
+---
+ include/configs/qemu-x86.h | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+
+diff --git a/include/configs/qemu-x86.h b/include/configs/qemu-x86.h
+index 687befdad3..2ba70174f3 100644
+--- a/include/configs/qemu-x86.h
++++ b/include/configs/qemu-x86.h
+@@ -62,4 +62,37 @@
+ #define CONFIG_SPL_BOARD_LOAD_IMAGE
+ #define BOOT_DEVICE_BOARD		11
+ 
++/*
++ * UpdateHub configuration
++ */
++
++#define CONFIG_BOOTCOUNT_ENV
++
++/* Environment */
++#undef CONFIG_ENV_IS_NOWHERE
++#define CONFIG_ENV_IS_IN_FAT
++#define FAT_ENV_INTERFACE       "ide"
++#define FAT_ENV_DEVICE_AND_PART "0:1"
++#define FAT_ENV_FILE            "u-boot.env"
++#define CONFIG_FAT_WRITE
++
++#define UPDATEHUB_LOAD_OS_A     "load ide 0:2 ${loadaddr} /boot/bzImage"
++#define UPDATEHUB_FIND_ROOT_A   "part uuid ide 0:2 uuid"
++
++#define UPDATEHUB_LOAD_OS_B     "load ide 0:3 ${loadaddr} /boot/bzImage"
++#define UPDATEHUB_FIND_ROOT_B   "part uuid ide 0:3 uuid"
++
++#define UPDATEHUB_BOOTARGS      "root=PARTUUID=${uuid} rootwait ro console=${consoledev}"
++#define UPDATEHUB_BOOTCMD       "zboot ${loadaddr}"
++
++#include <configs/updatehub-common.h>
++
++#undef CONFIG_EXTRA_ENV_SETTINGS
++#define CONFIG_EXTRA_ENV_SETTINGS			\
++	CONFIG_STD_DEVICES_SETTINGS			\
++	"pciconfighost=1\0"				\
++	"consoledev=ttyS0\0"				\
++	CONFIG_OTHBOOTARGS				\
++	UPDATEHUB_ENV
++
+ #endif	/* __CONFIG_H */
+-- 
+2.13.1
+
