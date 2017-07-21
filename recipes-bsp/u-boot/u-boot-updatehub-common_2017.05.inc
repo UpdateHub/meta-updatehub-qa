@@ -13,6 +13,7 @@ SRC_URI = "git://git.denx.de/u-boot.git \
     file://0002-qemu-x86_efi_payload32_defconfig-Add-FS_UUID-command.patch \
     file://0003-UpdateHub-Add-common-header.patch \
     file://0004-qemu-x86-Enable-use-of-UpdateHub.patch \
+    file://0005-vexpress-ca9x4-Enable-use-of-UpdateHub.patch \
 "
 
 S = "${WORKDIR}/git"
