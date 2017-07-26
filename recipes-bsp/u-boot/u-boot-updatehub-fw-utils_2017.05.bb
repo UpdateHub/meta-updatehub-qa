@@ -38,3 +38,5 @@ RPROVIDES_${PN} += "u-boot-fw-utils"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 BBCLASSEXTEND = "cross"
+
+COMPATIBLE_MACHINE = "(uh-qemu-i386|uh-qemu-armv5e)"
