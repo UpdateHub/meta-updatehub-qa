@@ -3,7 +3,7 @@ def __after_init_updatehub_qa():
 
     append_layers([ os.path.join(PLATFORM_ROOT_DIR, 'sources', p) for p in
                     [
-                        'meta-updatehub',
+                        'meta-updatehub-qa',
                     ]])
 
 run_after_init(__after_init_updatehub_qa)
