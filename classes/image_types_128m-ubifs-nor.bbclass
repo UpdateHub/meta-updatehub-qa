@@ -10,7 +10,7 @@ IMAGE_CMD_128m-ubifs-nor() {
 	cat > ${WORKDIR}/ubimg-${IMAGE_NAME}.cfg <<EOF
 [rootfsA]
 mode=ubi
-image=${DEPLOY_DIR_IMAGE}/${IMAGE_BASENAME}-${MACHINE}.ubifs
+image=${IMGDEPLOYDIR}/${IMAGE_BASENAME}-${MACHINE}.ubifs
 vol_id=0
 vol_size=54MiB
 vol_type=dynamic
@@ -18,7 +18,7 @@ vol_name=rootfsa
 
 [rootfsB]
 mode=ubi
-image=${DEPLOY_DIR_IMAGE}/${IMAGE_BASENAME}-${MACHINE}.ubifs
+image=${IMGDEPLOYDIR}/${IMAGE_BASENAME}-${MACHINE}.ubifs
 vol_id=1
 vol_size=54MiB
 vol_type=dynamic
@@ -57,5 +57,5 @@ EOF
     # Copy U-Boot binary blob
     cp ${DEPLOY_DIR_IMAGE}/u-boot-${MACHINE}.elf ${WORKDIR}/u-boot.elf
 
-	tar -C ${WORKDIR} -cf ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}${IMAGE_NAME_SUFFIX}.128m-ubifs-nor u-boot.elf nor0 nor1
+	tar -C ${WORKDIR} -cf ${IMGDEPLOYDIR}/${IMAGE_NAME}${IMAGE_NAME_SUFFIX}.128m-ubifs-nor u-boot.elf nor0 nor1
 }
