@@ -5,4 +5,4 @@ devpts               /dev/pts             devpts     mode=0620,gid=5       0  0
 tmpfs                /run                 tmpfs      mode=0755,nodev,nosuid,strictatime 0  0
 tmpfs                /var/volatile        tmpfs      defaults              0  0
 tmpfs                /tmp                 tmpfs      defaults,noatime,mode=1777      0 0
-/dev/vda3            /data                auto       defaults              0  0
+/dev/vda4            /data                auto       defaults              0  0
