@@ -1,6 +1,6 @@
 inherit image_types
 
-IMAGE_DEPENDS_128m-ubifs-nor = "virtual/bootloader:do_deploy"
+do_image_128m_ubifs_nor[depends] += "virtual/bootloader:do_deploy"
 IMAGE_TYPEDEP_128m-ubifs-nor_append = " ubifs"
 
 # MTD partitioning has the following layout:
