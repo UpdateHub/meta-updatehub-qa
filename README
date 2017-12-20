@@ -13,4 +13,4 @@ Dependencies
 This layer depends on:
 
   URI: git://github.com/UpdateHub/meta-updatehub
-  branch: master
+  branch: pyro
