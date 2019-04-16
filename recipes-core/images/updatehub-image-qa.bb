@@ -7,7 +7,7 @@ SUMMARY = "A small image used for UpdateHub Q/A test"
 inherit updatehub-image
 
 # Enable extra image features used for Q/A tests
-EXTRA_IMAGE_FEATURES = "ssh-server-openssh empty-root-password allow-empty-password"
+EXTRA_IMAGE_FEATURES += "debug-tweaks ssh-server-openssh"
 
 # Add utilities to easy test and verification
 CORE_IMAGE_EXTRA_INSTALL += "updatehub-ctl"
