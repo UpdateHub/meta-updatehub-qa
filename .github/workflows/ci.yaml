@@ -1,0 +1,96 @@
+name: "Continuous Integration"
+
+on:
+  push:
+#    branches:
+#      - master
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        machine: [uh-qemu-armv5e, uh-qemu-x86-64]
+        image: [updatehub-image-base]
+
+    env:
+      BRANCH: master
+      LC_ALL: en_US.UTF-8
+      LANG: en_US.UTF-8
+      LANGUAGE: en_US.UTF-8
+
+    container:
+      image: ossystems/github-actions-yocto-builder:latest
+      env:
+        WORKSPACE: /opt/build
+      volumes:
+        - ${{ github.workspace }}:/opt/build
+      options: --privileged
+
+    steps:
+      - name: Prepare the container
+        shell: bash
+        run: |
+          sudo sysctl fs.inotify.max_user_watches=524288
+          sudo chown builder:builder ${WORKSPACE}
+
+      - name: Checkout required repositories
+        shell: bash
+        run: |
+          echo Cloning Poky repository
+          git clone git://git.yoctoproject.org/poky --depth 1 -b $BRANCH
+          echo
+          echo Poky commit is:
+          git --git-dir ${WORKSPACE}/poky/.git log -1
+          rm -rf ${WORKSPACE}/poky/.git
+
+          echo Cloning openembedded/meta-openembedded repository
+          git clone git://github.com/openembedded/meta-openembedded --depth 1 -b $BRANCH
+          echo
+          echo openembedded/meta-openembedded commit is:
+          git --git-dir ${WORKSPACE}/meta-openembedded/.git log -1
+          rm -rf ${WORKSPACE}/meta-openembedded/.git
+
+          echo Cloning UpdateHub/meta-updatehub repository
+          git clone git://github.com/UpdateHub/meta-updatehub --depth 1 -b $BRANCH
+          echo
+          echo UpdateHub/meta-updatehub commit is:
+          git --git-dir ${WORKSPACE}/meta-updatehub/.git log -1
+          rm -rf ${WORKSPACE}/meta-updatehub/.git
+
+      - name: Checkout this repository
+        uses: actions/checkout@v2
+        with:
+          path: meta-updatehub-qa
+
+      - name: Setup Yocto Project environment
+        shell: bash
+        run: |
+          source ${WORKSPACE}/poky/oe-init-build-env ${WORKSPACE}/build
+
+          cat <<EOF >> conf/local.conf
+          MACHINE = "${{ matrix.machine }}"
+          INHERIT += "rm_work"
+          BB_DISKMON_DIRS = ""
+          BB_GIT_SHALLOW = "1"
+          BB_GIT_SHALLOW_DEPTH = "1"
+          BB_GENERATE_SHALLOW_TARBALLS = "1"
+          BB_NUMBER_THREADS = "2"
+          PARALLEL_MAKE = "-j 2"
+          EOF
+          sed -i "s/buildstats//g" conf/local.conf
+
+          bitbake-layers add-layer ${WORKSPACE}/meta-openembedded/meta-oe
+          bitbake-layers add-layer ${WORKSPACE}/meta-openembedded/meta-python
+          bitbake-layers add-layer ${WORKSPACE}/meta-openembedded/meta-networking
+          bitbake-layers add-layer ${WORKSPACE}/meta-updatehub
+          bitbake-layers add-layer ${WORKSPACE}/meta-updatehub-qa
+
+      - name: Build image ${{ matrix.image }}
+        shell: bash
+        run: |
+          source ${WORKSPACE}/poky/oe-init-build-env ${WORKSPACE}/build
+
+          bitbake ${{ matrix.image }}
