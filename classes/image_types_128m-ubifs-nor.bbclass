@@ -1,12 +1,12 @@
 inherit image_types
 
 do_image_128m_ubifs_nor[depends] += "virtual/bootloader:do_deploy"
-IMAGE_TYPEDEP_128m-ubifs-nor_append = " ubifs"
+IMAGE_TYPEDEP:128m-ubifs-nor:append = " ubifs"
 
 # MTD partitioning has the following layout:
 # 1m(u-boot-env),
 # -(rootfs)
-IMAGE_CMD_128m-ubifs-nor() {
+IMAGE_CMD:128m-ubifs-nor() {
 	cat > ${WORKDIR}/ubimg-${IMAGE_NAME}.cfg <<EOF
 [rootfsA]
 mode=ubi
