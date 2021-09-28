@@ -14,5 +14,5 @@ do_install() {
                     ${D}/usr/local/share/ca-certificates/staging.updatehub.io.crt
 }
 
-FILES_${PN} += "/usr/local/share/ca-certificates"
-RDEPENDS_${PN} += "ca-certificates"
+FILES:${PN} += "/usr/local/share/ca-certificates"
+RDEPENDS:${PN} += "ca-certificates"

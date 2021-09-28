@@ -1,6 +1,6 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-SRC_URI_append_uh-qemu-armv5e = " \
+SRC_URI:append:uh-qemu-armv5e = " \
     file://ubi.cfg \
     file://mtd.cfg \
 "
