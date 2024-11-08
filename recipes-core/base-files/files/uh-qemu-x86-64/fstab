@@ -1,4 +1,4 @@
-/dev/root            /                    auto       defaults              1  1
+/dev/root            /                    auto       defaults,x-systemd.growfs 1  1
 /dev/vda1            /boot/efi            auto       defaults              1  1
 proc                 /proc                proc       defaults              0  0
 devpts               /dev/pts             devpts     mode=0620,gid=5       0  0
